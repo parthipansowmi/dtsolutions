@@ -1,3 +1,6 @@
 [submodule "bmf"]
 	path = bmf
 	url = https://github.com/parthipansowmi/bmf
+[submodule "bmfapp"]
+	path = bmfapp
+	url = https://github.com/parthipansowmi/bmfapp
