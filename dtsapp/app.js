@@ -4,9 +4,21 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var MongoClient = require('mongodb').MongoClient;
+var Promise = require('bluebird').Promise;
+//var logger = require('winston').logger;
+//var config = require( './config');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var userProfile = require('./routes/userProfile');
+var resetPasscode = require('./routes/resetPasscode');
+var customer = require('./routes/customer');
+var Provider = require('./routes/serviceprovider');
+var Booking = require('./routes/booking');
+var util = require('./routes/util');
+var ProviderLogin = require('./routes/providerlogin')
+var Search = require('./routes/search');
 
 var app = express();
 
@@ -25,8 +37,44 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 
+app.get('/findemail', userProfile.findEmail);
+app.get('/checklogin', userProfile.checkCredential);
+app.post('/addcred', userProfile.adduserProfile);
+app.put('/updatecred', userProfile.updatenewPassword);
+app.delete('/removecred/:id', userProfile.deleteuserProfile);
+
+app.get('/checkemail', ProviderLogin.findEmail);
+app.get('/verifylogin', ProviderLogin.checkCredential);
+app.put('/updatelogin', ProviderLogin.updatenewPassword);
+app.post('/addlogin', ProviderLogin.addproviderlogin);
+app.delete('/removelogin', ProviderLogin.deleteproviderlogin);
+
+app.get('/getCode', resetPasscode.find);
+app.post('/storePasscode', resetPasscode.storePasscode);
+app.delete('/removeCode', resetPasscode.deletePasscode);
+
+app.get('/getCustomer', customer.findCustomer);
+app.post('/addNewCustomer', customer.addNewCustomer);
+app.delete('/removeCustomer', customer.deleteCustomer);
+
+app.get('/getProvider', Provider.findserviceProvider);
+app.post('/addNewProvider', Provider.addNewserviceProvider);
+app.delete('/removeProvider', Provider.deleteserviceProvider);
+
+app.get('/getBookingHistory', Booking.findBooking);
+app.post('/newBooking', Booking.addNewBooking);
+app.delete('/removeBooking', Booking.deleteBooking);
+
+app.get('/sendSMS', util.sendSMS);
+app.get('/generatePass', util.passwordCode);
+app.post('/sendmail', util.sendEmail);
+
+app.get('/searchProvider', Search.providerSearch);
+
+
+ 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
@@ -37,7 +85,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
+  app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -48,7 +96,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
@@ -56,5 +104,19 @@ app.use(function(err, req, res, next) {
   });
 });
 
+MongoClient.connect('mongodb://localhost:27017/bmf', { promiseLibrary: Promise }, (err, db) => {
+  if (err) {
+    console.log(`Failed to connect to the database. ${err.stack}`);
+  }
+  app.locals.db = db;
+  //console.log(app.locals.db);
+  app.listen('3002', () => {
+    console.log(`Node.js app is listening at http://localhost:3002`);
+  });
+});
+
+/*app.listen(3000, function () {
+  console.log('Application listening on port 3000!');
+});*/
 
 module.exports = app;
