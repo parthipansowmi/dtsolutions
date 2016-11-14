@@ -7,9 +7,10 @@ exports.checkCredential = function (req, res) {
     var email = req.query.usernameOrEmail;
     var password = req.query.password;
     var conn = req.app.locals.db;
-    var login = false;
-    //var collection =
+    var login = 'false';
+    
     console.log('Retrieving email: ' + email);
+    console.log('Password: '+password);
     conn.collection('userProfile', function (err, collection) {
         if (err) {
             console.log(" Error in opening collections");
@@ -19,11 +20,13 @@ exports.checkCredential = function (req, res) {
 
         else {
             collection.find({ "userEmail": email, "password": password }).toArray(function (err, docs) {
-                console.log(docs);
+                console.log("Document: "+docs.length);
+                if (err)
+                    login='false';
                 if (docs.length == 1)
-                    login = true;
+                    login = 'true';
                 else
-                    login = false;
+                    login = 'false';
                 console.log("Credential status: "+login);
                 res.send(login);
             });
@@ -38,6 +41,7 @@ exports.findEmail = function (req, res) {
     var login = false;
     conn.collection('userProfile',function (err, collection) {
         collection.find({ "userEmail": email}).toArray(function (err, items) {
+            console.log(" No. Documents: "+items.length);
             if (items.length == 1)
                     login = true;
                 else

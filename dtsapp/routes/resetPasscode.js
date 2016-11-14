@@ -45,12 +45,12 @@ exports.deletePasscode = function (req, res) {
         collection.find( {"email": email, "code": passResetCode}).toArray(function (err, items) {
         	if ( err || items.length == 0)
         	{
-        		status = false;
+        		status = 'false';
         		res.send(status);
         	}
             else
             {
-            	status=true;
+            	status='true';
             	res.send(status);
             }
         });

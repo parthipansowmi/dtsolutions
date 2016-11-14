@@ -7,10 +7,10 @@ exports.addNewserviceProvider = function (req, res) {
     db.collection('serviceProvider', function (err, collection) {
         collection.insert(data, { safe: true }, function (err, result) {
             if (err) {
-                res.send({ 'error': 'An error has occurred' });
+                res.send('false');
             } else {
                 console.log('Success: ' + JSON.stringify(result[0]));
-                res.send(result[0]);
+                res.send('true');
             }
         });
     });
@@ -41,7 +41,6 @@ exports.deleteserviceProvider = function (req, res) {
 
     exports.findserviceProvider = function (req, res) {
     var email = req.query.email;
-    
     var status;
     console.log("email: "+email);
     //console.log("serviceProvider"+serviceProvider);
@@ -57,6 +56,28 @@ exports.deleteserviceProvider = function (req, res) {
             {
             	status=true;
             	res.send(status);
+            }
+        });
+    });
+};
+
+ exports.searchByType = function (req, res) {
+    var servicetype = req.query.servicetype;
+    var status;
+    console.log("servicetype: "+servicetype);
+    //console.log("serviceProvider"+serviceProvider);
+    var conn = req.app.locals.db;
+    conn.collection('serviceProvider', function (err, collection) {
+        collection.find( {"servicetype": servicetype}).toArray(function (err, items) {
+            if ( err || items.length < 1)
+            {
+                status = false;
+                res.send('{ "error" : "No service proviider available for this category');
+            }
+            else
+            {
+                status=true;
+                res.send(items);
             }
         });
     });

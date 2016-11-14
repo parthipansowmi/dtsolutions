@@ -54,10 +54,10 @@ exports.addproviderlogin = function (req, res) {
     db.collection('providerlogin', function (err, collection) {
         collection.insert(userData, { safe: true }, function (err, result) {
             if (err) {
-                res.send({ 'error': 'An error has occurred' });
+                res.send('false');
             } else {
                 console.log('Success: ' + JSON.stringify(result[0]));
-                res.send(result[0]);
+                res.send('true');
             }
         });
     });

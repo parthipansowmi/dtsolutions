@@ -69,7 +69,7 @@ exports.sendEmail = function sendEmail(req, res) {
 exports.passwordCode = function passwordCode(req, res) {
   console.log(req.query);
     var length= req.query.length;
-  var chars = "abcdefghijklmnopqrstuvwxyz!@#$%^&*()-+<>ABCDEFGHIJKLMNOP1234567890";
+  var chars = "abcdefghijklmnopqrstuvwxyz!@#$%^*()-+<>ABCDEFGHIJKLMNOP1234567890";
   var pass = "";
   for (var x = 0; x < length; x++) {
     var i = Math.floor(Math.random() * chars.length);
@@ -77,4 +77,6 @@ exports.passwordCode = function passwordCode(req, res) {
   }
   res.send(pass) ;
 }
+
+
 

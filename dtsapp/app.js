@@ -56,21 +56,26 @@ app.delete('/removeCode', resetPasscode.deletePasscode);
 app.get('/getCustomer', customer.findCustomer);
 app.post('/addNewCustomer', customer.addNewCustomer);
 app.delete('/removeCustomer', customer.deleteCustomer);
+app.get('/getcustomerwithphone', customer.findCustomerWithPhone);
 
 app.get('/getProvider', Provider.findserviceProvider);
 app.post('/addNewProvider', Provider.addNewserviceProvider);
 app.delete('/removeProvider', Provider.deleteserviceProvider);
+app.get('/searchByType', Provider.searchByType);
 
 app.get('/getBookingHistory', Booking.findBooking);
+app.put('/cancelBooking', Booking.cancelBooking);
 app.post('/newBooking', Booking.addNewBooking);
+app.put('/changeDate', Booking.changeBookingDate);
 app.delete('/removeBooking', Booking.deleteBooking);
+app.put('/updateProviderLink', Booking.updateProviderLink);
 
 app.get('/sendSMS', util.sendSMS);
 app.get('/generatePass', util.passwordCode);
 app.post('/sendmail', util.sendEmail);
 
-app.get('/searchProvider', Search.providerSearch);
 
+app.get('/searchBooking', Search.bookingSearch);
 
  
 // catch 404 and forward to error handler
