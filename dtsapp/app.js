@@ -19,6 +19,7 @@ var Booking = require('./routes/booking');
 var util = require('./routes/util');
 var ProviderLogin = require('./routes/providerlogin')
 var Search = require('./routes/search');
+var Session = require('./routes/session');
 
 var app = express();
 
@@ -77,6 +78,9 @@ app.post('/sendmail', util.sendEmail);
 
 app.get('/searchBooking', Search.bookingSearch);
 
+app.get('/genSessionid', Session.generateSessionId);
+app.post('/addSession', Session.addSession);
+app.put('/deleteSession', Session.deleteSession);
  
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
