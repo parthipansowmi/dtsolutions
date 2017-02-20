@@ -39,7 +39,7 @@ exports.deleteserviceProvider = function (req, res) {
 
 }
 
-    exports.findserviceProvider = function (req, res) {
+exports.findserviceProvider = function (req, res) {
     var email = req.query.email;
     var status;
     console.log("email: "+email);
@@ -50,12 +50,12 @@ exports.deleteserviceProvider = function (req, res) {
         	if ( err || items.length < 1)
         	{
         		status = false;
-        		res.send(status);
+        		res.send(items);
         	}
             else
             {
             	status=true;
-            	res.send(status);
+            	res.send(items);
             }
         });
     });
@@ -82,3 +82,48 @@ exports.deleteserviceProvider = function (req, res) {
         });
     });
 };
+
+exports.updateEmail = function (req, res) {
+     var userEmail = req.query.email;
+     var newEmail = req.query.newemail
+    var db = req.app.locals.db;
+    console.log("Email: "+userEmail);
+    console.log("New Email: "+newEmail);
+    
+    console.log("Updating collection- updateEmail - serviceProvider ....");
+    db.collection('serviceProvider', function (err, collection) {
+
+        collection.findAndModify( { "email" :  userEmail },  [['_id','asc']],  {$set:  { "email" : newEmail}}, function (err, result) {
+            if (err) {                
+                console.log('Error updating providerlogin: ' + err);
+                res.send('false');
+
+            } else {
+                console.log('' + JSON.stringify(result) + ' document(s) updated');
+                res.send('true');            }
+        }); 
+    });
+}
+
+exports.updatePhone = function (req, res) {
+     var userEmail = req.query.email;
+     var newphone = req.query.newphone;
+    var db = req.app.locals.db;
+    console.log("Email: "+userEmail);
+    
+    console.log("Updating collection- updateEmail - serviceProvider ....");
+    db.collection('serviceProvider', function (err, collection) {
+
+        collection.findAndModify( { "email" :  userEmail },  [['_id','asc']],  {$set:  { "phone" : newphone}}, function (err, result) {
+            if (err) {               
+                console.log('Error updating providerlogin: ' + err);
+                res.send('false');
+
+            } else {
+                console.log('' + JSON.stringify(result[0]) + ' document(s) updated');
+                res.send('true'); 
+            }
+        }); 
+    });
+}
+

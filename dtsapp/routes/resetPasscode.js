@@ -20,7 +20,7 @@ exports.storePasscode = function (req, res) {
 exports.deletePasscode = function (req, res) {
     var id = req.query.code;
     console.log('Deleting passResetCode: ' + id);
-     var db = req.app.locals.db;
+    var db = req.app.locals.db;
     db.collection('passResetCode', function (err, collection) {
         collection.remove({'code': id}, { safe: true }, function (err, result) {
             if (result == 0) {

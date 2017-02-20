@@ -44,11 +44,11 @@ exports.sendEmail = function sendEmail(req, res) {
     from: 'dreamtruesolution@gmail.com', // sender address 
     to: tomail, // list of receivers 
     subject: subject, // Subject line 
-    //text: 'Password Reset Mail ', // plaintext body 
+    
     html: message// html body 
   };
 
-  // send mail with defined transport object  
+  
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log("Error Message' " + error);
@@ -78,5 +78,54 @@ exports.passwordCode = function passwordCode(req, res) {
   res.send(pass) ;
 }
 
+exports.addOTP = function (req, res) {
+    var data = req.body;
+    var db = req.app.locals.db;
+    console.log('Adding OTP: ' + JSON.stringify(data));
+    db.collection('otp', function (err, collection) {
+        collection.insert(data, { safe: true }, function (err, result) {
+            if (err) {
+                res.send('false');
+            } else {
+                console.log('Success: ' + JSON.stringify(result[0]));
+                res.send('true');
+            }
+        });
+    });
+};
 
+exports.deleteOTP = function (req, res) {
+    var otp= req.query.otp;
+    var db = req.app.locals.db;
+    console.log('Deleteing OTP: ' + JSON.stringify(otp));
+    db.collection('otp', function (err, collection) {
+        collection.remove({'otp': otp}, { safe: true }, function (err, result) {
+            if (err) {
+                res.send('false');
+            } else {
+                console.log('Success: ' + JSON.stringify(result));
+                res.send('true');
+            }
+        });
+    });
+};
 
+exports.findOTP = function (req, res) {
+    var email = req.query.email;
+    var otp = req.query.otp;
+    var db = req.app.locals.db;
+    console.log(' OTP: ' + otp);
+    db.collection('otp', function (err, collection) {
+        collection.find({ "email": email, "otp": otp}).toArray(function (err, items) {
+            if (err) {
+                res.send('false');
+            } else {
+                console.log('No. of records: ' + items.length);
+                if ( items.length > 0)
+                  res.send('true');
+                else 
+                  res.send('false');
+            }
+        });
+    });
+};

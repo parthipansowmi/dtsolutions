@@ -46,7 +46,7 @@ app.delete('/removecred/:id', userProfile.deleteuserProfile);
 
 app.get('/checkemail', ProviderLogin.findEmail);
 app.get('/verifylogin', ProviderLogin.checkCredential);
-app.put('/updatelogin', ProviderLogin.updatenewPassword);
+app.put('/updatelogin', ProviderLogin.updatenewEmail);
 app.post('/addlogin', ProviderLogin.addproviderlogin);
 app.delete('/removelogin', ProviderLogin.deleteproviderlogin);
 
@@ -63,9 +63,13 @@ app.get('/getProvider', Provider.findserviceProvider);
 app.post('/addNewProvider', Provider.addNewserviceProvider);
 app.delete('/removeProvider', Provider.deleteserviceProvider);
 app.get('/searchByType', Provider.searchByType);
+app.put('/updateEmail', Provider.updateEmail);
+app.put('/updatePhone', Provider.updatePhone);
 
 app.get('/getBookingHistory', Booking.findBooking);
-app.put('/cancelBooking', Booking.cancelBooking);
+app.get('/getbookingrec', Booking.findBookingById);
+app.get('/getbookingrecbyprovider',Booking.findBookingByProvider);
+app.put('/updatebookinstatus', Booking.updateBookingStatus);
 app.post('/newBooking', Booking.addNewBooking);
 app.put('/changeDate', Booking.changeBookingDate);
 app.delete('/removeBooking', Booking.deleteBooking);
@@ -74,9 +78,13 @@ app.put('/updateProviderLink', Booking.updateProviderLink);
 app.get('/sendSMS', util.sendSMS);
 app.get('/generatePass', util.passwordCode);
 app.post('/sendmail', util.sendEmail);
-
+app.post('/addOTP', util.addOTP);
+app.get('/findOTP', util.findOTP);
+app.delete('/deleteOTP', util.deleteOTP);
 
 app.get('/searchBooking', Search.bookingSearch);
+app.get('/searchbypincode', Search.providerZipCodeSearch);
+app.get('/searchbycity', Search.providerCitySearch);
 
 app.get('/genSessionid', Session.generateSessionId);
 app.post('/addSession', Session.addSession);

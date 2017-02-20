@@ -21,6 +21,7 @@ exports.addNewCustomer = function (req, res) {
 };
 
 
+
 exports.deleteCustomer = function (req, res) {
     var email = req.query.email;
     console.log('Deleting customer: ' + email);
@@ -35,8 +36,8 @@ exports.deleteCustomer = function (req, res) {
             }
         });
     });
-
 };
+
 
     exports.findCustomer = function (req, res) {
     var email = req.query.email;
@@ -50,12 +51,12 @@ exports.deleteCustomer = function (req, res) {
         	if ( err || items.length < 1)
         	{
         		status = false;
-        		res.send(status);
+        		res.send({"status": status});
         	}
             else
             {
             	status=true;
-            	res.send(status);
+            	res.send(items);
             }
         });
     });

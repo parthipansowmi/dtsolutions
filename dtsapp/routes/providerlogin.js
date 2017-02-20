@@ -65,7 +65,7 @@ exports.addproviderlogin = function (req, res) {
 
 
 exports.updatenewPassword = function (req, res) {
-    var password = req.query.password;
+    var password = req.query.newpass;
     var userEmail = req.query.email;
     var db = req.app.locals.db;
     console.log("Email: "+userEmail);
@@ -78,7 +78,27 @@ exports.updatenewPassword = function (req, res) {
                 console.log('Error updating providerlogin: ' + err);
                 res.send('false');
             } else {
-                console.log('' + result.length + ' document(s) updated');
+                console.log('' + JSON.stringify(result) + ' document(s) updated');
+                res.send('true'); 
+            }
+        }); 
+    });
+}
+
+exports.updatenewEmail = function (req, res) {
+    var newemail = req.query.newemail;
+    var userEmail = req.query.email;
+    var db = req.app.locals.db;
+    console.log("Email: "+userEmail);
+    console.log("Updating collection ....");
+    db.collection('providerlogin', function (err, collection) {
+
+        collection.findAndModify( { "email" :  userEmail },  [['_id','asc']],  {$set:  { "email" : newemail }}, function (err, result) {
+            if (err) {
+                console.log('Error updating providerlogin: ' + err);
+                res.send('false');
+            } else {
+                console.log('' + JSON.stringify(result) + ' document(s) updated');
                 res.send('true'); 
             }
         }); 
